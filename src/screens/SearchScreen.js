@@ -1,40 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import useRestaurants from "../hooks/useRestaurants";
 import { Text } from "../components/standard-components";
 import SearchBar from "../components/SearchBar";
-import yelp from "../api/yelp";
+import styled from "styled-components";
+import ResultsList from "../components/ResultsList";
 
 const SearchScreen = () => {
   const [term, setTerm] = useState("");
-  const [restaurants, setRestaurants] = useState([]);
-  const [errorMessage, setErrorMessage] = useState();
+  const [searchApi, restaurants, errorMessage] = useRestaurants();
 
-  useEffect(() => {
-    onTermSubmit("food");
-  }, []);
-
-  const onTermSubmit = async searchTerm => {
-    try {
-      const response = await yelp.get("/search", {
-        params: {
-          limit: 50,
-          term: searchTerm,
-          location: "south jordan, utah"
-        }
-      });
-      setRestaurants(response.data.businesses);
-    } catch (e) {
-      setErrorMessage("Something went wrong");
-    }
-  };
+  const filterResultsByPrice = price =>
+    restaurants.filter(result => result.price === price);
 
   return (
     <>
       <SearchBar
         {...{ term, setTerm }}
-        onTermSubmit={() => onTermSubmit(term)}
+        placeholder="pasta"
+        onTermSubmit={() => searchApi(term)}
       />
       {errorMessage && <Text>{errorMessage}</Text>}
-      <Text>We have found {restaurants.length} results</Text>
+      <ResultsList
+        results={filterResultsByPrice("$")}
+        title={"Cost Effective"}
+      />
+      <ResultsList
+        results={filterResultsByPrice("$$")}
+        title={"Moderate Price"}
+      />
+      <ResultsList
+        results={filterResultsByPrice("$$$")}
+        title={"Big Spender"}
+      />
     </>
   );
 };

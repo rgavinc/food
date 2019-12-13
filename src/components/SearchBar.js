@@ -22,13 +22,13 @@ const TextInput = styled.TextInput`
   font-size: 18px;
 `;
 
-const SearchBar = ({ term, setTerm, onTermSubmit }) => {
+const SearchBar = ({ term, setTerm, onTermSubmit, placeholder = "Search" }) => {
   return (
     <View>
       <Icon name="search" />
       <TextInput
+        {...{ placeholder }}
         autoCapitalize="none"
-        placeholder="Search"
         value={term}
         onChangeText={setTerm}
         onEndEditing={onTermSubmit}
