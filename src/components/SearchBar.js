@@ -6,9 +6,10 @@ const View = styled.View`
 margin-top: 10px
   background-color: #f0eeee;
   height: 50px;
-  margin-horizontal: 30px;
+  margin-horizontal: 15px;
   flex-direction: row;
   border-radius: 10px;
+  margin-bottom: 10px;
 `;
 
 const Icon = styled(Feather)`
