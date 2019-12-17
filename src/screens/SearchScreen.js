@@ -7,8 +7,7 @@ import ResultsList from "../components/ResultsList";
 
 const ScrollView = styled.ScrollView``;
 
-const SearchScreen = props => {
-  console.log({ props });
+const SearchScreen = () => {
   const [term, setTerm] = useState("");
   const [searchApi, restaurants, errorMessage] = useRestaurants();
 

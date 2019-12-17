@@ -18,7 +18,6 @@ const TextHeavy = styled.Text`
 const Text = styled.Text``;
 
 const ResultsDetail = ({ name, image_url, rating, review_count }) => {
-  console.log({ image_url });
   return (
     <View>
       <Image source={{ uri: image_url }} />

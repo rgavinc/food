@@ -1,24 +1,36 @@
-import React, { useState } from "react";
-import useRestaurants from "../hooks/useRestaurants";
-import SearchBar from "../components/SearchBar";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import ResultsList from "../components/ResultsList";
+import yelp from "../api/yelp";
 
-const ScrollView = styled.ScrollView``;
 const Text = styled.Text``;
+const FlatList = styled.FlatList``;
+const Image = styled.Image`
+  width: 300px;
+  height: 200px;
+`;
 
-const ResultsShowScreen = () => {
-  const [term, setTerm] = useState("");
-  const [searchApi, restaurants, errorMessage] = useRestaurants();
+const ResultsShowScreen = ({ navigation }) => {
+  const [restaurant, setRestaurant] = useState();
+  const id = navigation.getParam("id");
+  const getRestaurant = async id => {
+    const response = await yelp.get(`/${id}`);
+    setRestaurant(response.data);
+  };
+  useEffect(() => {
+    getRestaurant(id);
+  }, []);
+  console.log({ restaurant });
 
-  const filterResultsByPrice = price =>
-    restaurants.filter(result => result.price === price);
-
-  return (
+  return restaurant ? (
     <>
-      <Text>Results Show</Text>
+      <Text>{restaurant.name}</Text>
+      <FlatList
+        data={restaurant.photos}
+        keyExtractor={photo => photo}
+        renderItem={({ item }) => <Image source={{ uri: item }} />}
+      />
     </>
-  );
+  ) : null;
 };
 
 export default ResultsShowScreen;
